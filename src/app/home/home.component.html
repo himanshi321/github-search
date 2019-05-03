@@ -1,0 +1,89 @@
+<div class="clr-col-sm-12">
+  <h3 style="color:#00bcd4;text-align: center">
+    Search for github repositories
+  </h3>
+  <br />
+  <div style="height:1px;width:100%;background:#d1d1d1"></div>
+  <br />
+</div>
+<div style="margin-left: auto;margin-right: auto">
+  <div class="clr-col-lg-12">
+    <button class="btn btn-sm" (click)="navigateToBookmarks()">
+      <clr-icon class="is-solid" shape="bookmark"></clr-icon> View Bookmarked
+      Repositories
+    </button>
+    <form clrForm style="text-align: right;">
+      <clr-input-container>
+        <input
+          autocomplete="off"
+          clrInput
+          placeholder="search "
+          name="name"
+          [(ngModel)]="searchParam"
+          (ngModelChange)="searchForRepositories(false)"
+        />
+      </clr-input-container>
+    </form>
+    <clr-datagrid>
+      <div class="table-heading">
+        <clr-dg-column class="clr-col-sm-1"></clr-dg-column>
+        <clr-dg-column class="clr-col-sm-1">#</clr-dg-column>
+        <clr-dg-column>Repository Name</clr-dg-column>
+        <clr-dg-column>User Name</clr-dg-column>
+        <clr-dg-column>Description</clr-dg-column>
+        <clr-dg-column>
+          <div style="text-align:center">Clone Repository</div>
+        </clr-dg-column>
+      </div>
+      <clr-dg-row
+        class="table-row"
+        *clrDgItems="let r of searchList; let i = index"
+        (click)="navigateToDetailPage(r)"
+      >
+        <clr-dg-cell class="clr-col-sm-1">
+          <clr-icon
+            *ngIf="!r.favorite"
+            (click)="r.favorite = !r.favorite; maintainFavorites(r, $event)"
+            shape="bookmark"
+          >
+          </clr-icon>
+          <clr-icon
+            style="color:gold"
+            *ngIf="r.favorite"
+            class="is-solid"
+            (click)="r.favorite = !r.favorite; maintainFavorites(r, $event)"
+            shape="bookmark"
+          ></clr-icon>
+        </clr-dg-cell>
+        <clr-dg-cell class="clr-col-sm-1">{{ i + 1 }}</clr-dg-cell>
+        <clr-dg-cell>{{ r.name }}</clr-dg-cell>
+        <clr-dg-cell>{{ getUserName(r?.full_name) }}</clr-dg-cell>
+        <clr-dg-cell>{{ r.description }}</clr-dg-cell>
+        <clr-dg-cell
+          class="clone"
+          style="text-align: center"
+          (click)="copyToClipBoard(r?.clone_url, $event)"
+        >
+          <span style="color:#1165ab;font-size:11px;">
+            <clr-icon shape="copy-to-clipboard"></clr-icon> &nbsp;Copy URL
+          </span>
+        </clr-dg-cell>
+      </clr-dg-row>
+    </clr-datagrid>
+    <div
+      style="text-align:center"
+      *ngIf="curentPageResponse?.total_count > searchList?.length"
+    >
+      <button class="btn btn-sm btn-link" (click)="loadMore()">
+        Load more......
+      </button>
+    </div>
+  </div>
+</div>
+<div id="snackbar"></div>
+<router-outlet style="z-index:-1">
+  <ngx-loading
+    [show]="loadingFlag"
+    [config]="{ backdropBorderRadius: '14px' }"
+  ></ngx-loading>
+</router-outlet>

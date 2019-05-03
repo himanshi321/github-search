@@ -1,0 +1,55 @@
+<div class="clr-col-sm-12">
+  <h3 style="color:#00bcd4;text-align: center">Bookmarks</h3>
+  <br />
+  <div style="height:1px;width:100%;background:#d1d1d1"></div>
+  <br />
+</div>
+<div style="margin-left: auto;margin-right: auto">
+  <div class="clr-col-lg-12">
+    <clr-datagrid>
+      <div class="table-heading">
+        <clr-dg-column class="clr-col-sm-1">#</clr-dg-column>
+        <clr-dg-column>Repository Name</clr-dg-column>
+        <clr-dg-column>User Name</clr-dg-column>
+        <clr-dg-column>Description</clr-dg-column>
+        <clr-dg-column>
+          <div style="text-align:center">Clone Repository</div>
+        </clr-dg-column>
+        <clr-dg-column>
+          <div style="text-align:center">Remove Bookmark</div>
+        </clr-dg-column>
+      </div>
+      <clr-dg-row
+        class="table-row"
+        *clrDgItems="let r of searchList; let i = index"
+        (click)="navigateToDetailPage(r)"
+      >
+        <clr-dg-cell class="clr-col-sm-1">{{ i + 1 }}</clr-dg-cell>
+        <clr-dg-cell>{{ r.name }}</clr-dg-cell>
+        <clr-dg-cell>{{ getUserName(r?.full_name) }}</clr-dg-cell>
+        <clr-dg-cell>{{ r.description }}</clr-dg-cell>
+        <clr-dg-cell
+          class="clone"
+          style="text-align: center"
+          (click)="copyToClipBoard(r?.clone_url, $event)"
+        >
+          <span style="color:#1165ab;font-size:11px;">
+            <clr-icon shape="copy-to-clipboard"></clr-icon> &nbsp;Copy URL
+          </span>
+        </clr-dg-cell>
+        <clr-dg-cell>
+          <div style="text-align:center">
+            <clr-icon
+              style="color:gold;"
+              *ngIf="r.favorite"
+              class="is-solid"
+              (click)="r.favorite = !r.favorite; removeBookmarks(r, $event)"
+              shape="bookmark"
+            ></clr-icon>
+          </div>
+        </clr-dg-cell>
+      </clr-dg-row>
+    </clr-datagrid>
+  </div>
+</div>
+<div id="snackbar"></div>
