@@ -53,6 +53,7 @@ export class HomeComponent {
               this.loadingFlag = false;
             }, 1000);
           }
+          this.util.showSnackbar('API rate limit exceeded, Please retry after some time')
         }
       )
     }
